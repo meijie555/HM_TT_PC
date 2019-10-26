@@ -4,11 +4,11 @@
     <!-- 卡片容器  element-ui中的组件-->
     <el-card>
       <img src="../../assets/logo_index.png" alt />
-      <el-form :model="Loginform">
-        <el-form-item>
+      <el-form :model="Loginform" :rules="LoginRules" status-icon ref="loginform">
+        <el-form-item prop="mobile">
           <el-input v-model="Loginform.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="code">
           <el-input
             v-model="Loginform.code"
             placeholder="请输入验证码"
@@ -17,7 +17,10 @@
           <el-button>发送验证码</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:100%">登录</el-button>
+          <el-checkbox :value="true">我已阅读并同意用户协议和隐私条款</el-checkbox>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="login" style="width:100%">登录</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -27,8 +30,45 @@
 <script>
 export default {
   data () {
+    // 自定义校验手机号
+    const checkMoblie = (rules, value, callback) => {
+      if (/^1[3-9]\d{9}$/.test(value)) {
+        callback()
+      } else {
+        callback(new Error('手机号格式不对'))
+      }
+    }
     return {
-      Loginform: { mobile: '', code: '' }
+      Loginform: { mobile: '', code: '' },
+      // 校验规则
+      LoginRules: {
+        mobile: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { validator: checkMoblie, trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { len: 6, message: '验证码是6位', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  methods: {
+    // 整体校验
+    login () {
+      this.$refs['loginform'].validate(valid => {
+        if (valid) {
+          this.$axios
+            .post('authorizations', this.Loginform)
+            .then(res => {
+              // 跳转页面
+              this.$router.push('/')
+            })
+            .catch(() => {
+              this.$message.error('错了哦，这是一条错误消息')
+            })
+        }
+      })
     }
   }
 }
