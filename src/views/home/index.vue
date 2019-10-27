@@ -2,15 +2,17 @@
   <!-- 整体容器 -->
   <el-container class="home-container">
     <!-- 侧边栏 -->
-    <el-aside width="200px">
+    <el-aside :width="isOpen?'200px':'64px'">
       <!-- logo -->
-      <div class="logo"></div>
+      <div class="logo" :class="{smallLogo:!isOpen}"></div>
       <el-menu
         default-active="1"
         background-color="#002033"
         text-color="#fff"
         active-text-color="#ffd04b"
         style="border-right:none"
+        :collapse="!isOpen"
+        :collapse-transition="false"
       >
         <el-menu-item index="1">
           <i class="el-icon-s-home"></i>
@@ -46,7 +48,7 @@
       <!-- 头部 -->
       <el-header>
         <!-- 图标 -->
-        <span class="icon el-icon-s-fold"></span>
+        <span class="icon el-icon-s-fold" @click="toggleMenu"></span>
         <!-- 文字 -->
         <span class="text">江苏传智播客科技教育有限公司</span>
         <!-- 下拉菜单 -->
@@ -71,7 +73,18 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      isOpen: true
+    }
+  },
+  methods: {
+    toggleMenu () {
+      this.isOpen = !this.isOpen
+    }
+  }
+}
 </script>
 
 <style scoped lang='less'>
@@ -88,6 +101,10 @@ export default {}
       height: 60px;
       background: #002244 url(../../assets/logo_admin.png) no-repeat center /
         140px auto;
+    }
+    .smallLogo {
+      background-image: url(../../assets/logo_admin_01.png);
+      background-size: 36px auto;
     }
   }
   .el-header {
