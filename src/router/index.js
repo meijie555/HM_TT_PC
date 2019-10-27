@@ -17,6 +17,24 @@ const router = new VueRouter({
     children: [{
       path: '/',
       component: Welcome
+    }, {
+      path: '/article',
+      component: Welcome
+    }, {
+      path: '/image',
+      component: Welcome
+    }, {
+      path: '/publish',
+      component: Welcome
+    }, {
+      path: '/comment',
+      component: Welcome
+    }, {
+      path: '/fans',
+      component: Welcome
+    }, {
+      path: '/setting',
+      component: Welcome
     }]
   }]
 })
