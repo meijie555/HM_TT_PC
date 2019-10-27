@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '@/views/login'
 import Home from '@/views/home'
+import Welcome from '@/views/welcome'
 
 Vue.use(VueRouter)
 
@@ -11,7 +12,12 @@ const router = new VueRouter({
     component: Login
   }, {
     path: '/',
-    component: Home
+    component: Home,
+    // 二级路由
+    children: [{
+      path: '/',
+      component: Welcome
+    }]
   }]
 })
 
