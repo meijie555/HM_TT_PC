@@ -53,16 +53,16 @@
         <!-- 文字 -->
         <span class="text">江苏传智播客科技教育有限公司</span>
         <!-- 下拉菜单 -->
-        <el-dropdown class="dropdown">
+        <el-dropdown class="dropdown" @command='handleClick'>
           <span class="el-dropdown-link">
             <img :src="photo" alt class="headIcon" />
             <span class="userName">{{name}}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-           <!--  native 修饰符  目的：把事件绑定到原生dom上 -->
-            <el-dropdown-item icon="el-icon-setting" @click.native='setting'>个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock" @click.native='logout'>退出登录</el-dropdown-item>
+           <!--  native 修饰符  目的：把事件绑定到原生dom上  @click.native='logout'-->
+            <el-dropdown-item icon="el-icon-setting" command='setting'>个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" command='logout'>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -94,6 +94,10 @@ export default {
     logout () {
       local.delUser()
       this.$router.push('/login')
+    },
+    handleClick (command) {
+      // command 可能是 setting 或 logout 这种写法前提是有setting或logout方法
+      this[command]()
     }
   },
   created () {
