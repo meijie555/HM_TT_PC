@@ -60,8 +60,9 @@
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-setting">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock">退出登录</el-dropdown-item>
+           <!--  native 修饰符  目的：把事件绑定到原生dom上 -->
+            <el-dropdown-item icon="el-icon-setting" @click.native='setting'>个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" @click.native='logout'>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -86,9 +87,15 @@ export default {
   methods: {
     toggleMenu () {
       this.isOpen = !this.isOpen
+    },
+    setting () {
+      this.$router.push('/setting')
+    },
+    logout () {
+      local.delUser()
+      this.$router.push('/login')
     }
   },
-  // 测试
   created () {
     const user = local.getUser() || {}
     this.photo = user.photo
