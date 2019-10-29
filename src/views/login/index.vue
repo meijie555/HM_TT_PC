@@ -57,19 +57,30 @@ export default {
   methods: {
     // 整体校验
     login () {
-      this.$refs['loginform'].validate(valid => {
+      this.$refs['loginform'].validate(async valid => {
         if (valid) {
-          this.$axios
-            .post('authorizations', this.Loginform)
-            .then(res => {
-              // 保存token  res 是响应对象  res.data 是响应主体
-              local.setUser(res.data.data)
-              // 跳转页面
-              this.$router.push('/')
-            })
-            .catch(() => {
-              this.$message.error('错了哦，这是一条错误消息')
-            })
+          // this.$axios
+          //   .post('authorizations', this.Loginform)
+          //   .then(res => {
+          //     // 保存token  res 是响应对象  res.data 是响应主体
+          //     local.setUser(res.data.data)
+          //     // 跳转页面
+          //     this.$router.push('/')
+          //   })
+          //   .catch(() => {
+          //     this.$message.error('错了哦，这是一条错误消息')
+          //   })
+
+          // async（异步）和 await（同步）
+          // await 修饰的是一个返回promise对象的函数 返回一个正确的结果
+          // try{可能出错的代码}catch(e){出错处理}
+          try {
+            const { data: { data } } = await this.$axios.post('authorizations', this.Loginform)
+            local.setUser(data)
+            this.$router.push('/')
+          } catch (e) {
+            this.$message.error('手机号或验证码错误')
+          }
         }
       })
     }
