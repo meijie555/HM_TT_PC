@@ -55,8 +55,8 @@
         <!-- 下拉菜单 -->
         <el-dropdown class="dropdown">
           <span class="el-dropdown-link">
-            <img src="../../assets/avatar.jpg" alt class="headIcon" />
-            <span class="userName">用户名</span>
+            <img :src="photo" alt class="headIcon" />
+            <span class="userName">{{name}}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -74,10 +74,13 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     return {
-      isOpen: true
+      isOpen: true,
+      photo: '',
+      name: ''
     }
   },
   methods: {
@@ -87,9 +90,9 @@ export default {
   },
   // 测试
   created () {
-    this.$axios.get('user/profile').then(res => {
-      console.log(res)
-    })
+    const user = local.getUser() || {}
+    this.photo = user.photo
+    this.name = user.name
   }
 }
 </script>
