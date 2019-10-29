@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     // 自定义校验手机号
@@ -61,6 +62,8 @@ export default {
           this.$axios
             .post('authorizations', this.Loginform)
             .then(res => {
+              // 保存token  res 是响应对象  res.data 是响应主体
+              local.setUser(res.data.data)
               // 跳转页面
               this.$router.push('/')
             })
