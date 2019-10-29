@@ -40,7 +40,7 @@ export default {
       }
     }
     return {
-      Loginform: { mobile: '', code: '' },
+      Loginform: { mobile: '15088886666', code: '246810' },
       // 校验规则
       LoginRules: {
         mobile: [
