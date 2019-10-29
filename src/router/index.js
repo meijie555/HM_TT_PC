@@ -5,6 +5,7 @@ import Home from '@/views/home'
 import Welcome from '@/views/welcome'
 import NotFound from '@/views/404'
 import local from '@/utils/local'
+import Article from '@/views/article'
 
 Vue.use(VueRouter)
 
@@ -24,22 +25,22 @@ const router = new VueRouter({
       component: Welcome
     }, {
       path: '/article',
-      component: Welcome
+      component: Article
     }, {
       path: '/image',
-      component: Welcome
+      component: null
     }, {
       path: '/publish',
-      component: Welcome
+      component: null
     }, {
       path: '/comment',
-      component: Welcome
+      component: null
     }, {
       path: '/fans',
-      component: Welcome
+      component: null
     }, {
       path: '/setting',
-      component: Welcome
+      component: null
     }]
   }]
 })
