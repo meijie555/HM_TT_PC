@@ -84,6 +84,12 @@ export default {
     toggleMenu () {
       this.isOpen = !this.isOpen
     }
+  },
+  // 测试
+  created () {
+    this.$axios.get('user/profile').then(res => {
+      console.log(res)
+    })
   }
 }
 </script>
