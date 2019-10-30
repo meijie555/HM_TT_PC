@@ -5,8 +5,9 @@
     <el-aside :width="isOpen?'200px':'64px'">
       <!-- logo -->
       <div class="logo" :class="{smallLogo:!isOpen}"></div>
+      <!--激活导航菜单 属性 default-active="/" 等于  当前路由路径  -->
       <el-menu
-        default-active="/"
+        :default-active="$route.path"
         background-color="#002033"
         text-color="#fff"
         active-text-color="#ffd04b"
