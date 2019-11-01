@@ -20,9 +20,9 @@
           <el-select v-model="reqParams.channel_id" placeholder="请选择">
             <el-option
               v-for="item in channelOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -67,8 +67,19 @@ export default {
         begin_pubdata: null,
         end_pubdata: null
       },
-      channelOptions: [{ value: 1, label: 'web' }, { value: 2, label: 'java' }],
-      valueArr: []
+      channelOptions: [],
+      valueArr: [],
+      articles: []
+    }
+  },
+  created () {
+    this.getChannelOptions()
+  },
+  methods: {
+    // 频道数据获取
+    async getChannelOptions () {
+      const { data: { data } } = await this.$axios.get('channels')
+      this.channelOptions = data.channels
     }
   }
 }
