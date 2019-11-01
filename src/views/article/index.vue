@@ -69,9 +69,9 @@
         </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120">
-          <template>
-            <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+          <template slot-scope="scope">
+            <el-button @click="editdata(scope.row.id)" type="primary" icon="el-icon-edit" circle plain></el-button>
+            <el-button @click="delData(scope.row.id)" type="danger" icon="el-icon-delete" circle plain></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -145,6 +145,12 @@ export default {
         this.reqParams.begin_pubdate = null
         this.reqParams.end_pubdate = null
       }
+    },
+    editdata (id) {
+      this.$router.push({ path: '/publish', query: { id } })
+    },
+    delData (id) {
+
     }
   }
 }
