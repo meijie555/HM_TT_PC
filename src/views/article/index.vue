@@ -149,8 +149,10 @@ export default {
     editdata (id) {
       this.$router.push({ path: '/publish', query: { id } })
     },
-    delData (id) {
-
+    async delData (id) {
+      await this.$axios.delete(`articles/${id}`)
+      this.$message.success('删除成功')
+      this.getArticles()
     }
   }
 }
