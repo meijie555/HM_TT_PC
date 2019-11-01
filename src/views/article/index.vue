@@ -43,7 +43,7 @@
     <!-- 筛选结果-->
     <el-card style="margin-top:20px">
       <div slot="header">
-        <span>根据筛选条件共查询到 0 条结果：</span>
+        <span>根据筛选条件共查询到 {{total}} 条结果：</span>
       </div>
       <el-table :data="articles">
         <el-table-column label="封面">
@@ -58,22 +58,29 @@
         <el-table-column label="标题" prop="title"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-tag type="info" v-if='scope.row.status===0'>草稿</el-tag>
-            <el-tag v-if='scope.row.status===1'>待审核</el-tag>
-            <el-tag type="success" v-if='scope.row.status===2'>审核通过</el-tag>
-            <el-tag type="warning" v-if='scope.row.status===3'>审核失败</el-tag>
-            <el-tag type="danger" v-if='scope.row.status===4'>已删除</el-tag>
+            <el-tag type="info" v-if="scope.row.status===0">草稿</el-tag>
+            <el-tag v-if="scope.row.status===1">待审核</el-tag>
+            <el-tag type="success" v-if="scope.row.status===2">审核通过</el-tag>
+            <el-tag type="warning" v-if="scope.row.status===3">审核失败</el-tag>
+            <el-tag type="danger" v-if="scope.row.status===4">已删除</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120">
           <template>
-             <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
-             <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+            <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="reqParams.per_page"
+        :current-page="reqParams.page"
+        @current-change="pager"
+      ></el-pagination>
     </el-card>
   </div>
 </template>
@@ -86,11 +93,14 @@ export default {
         status: null,
         channel_id: null,
         begin_pubdata: null,
-        end_pubdata: null
+        end_pubdata: null,
+        page: 1,
+        per_page: 20
       },
       channelOptions: [],
       valueArr: [],
-      articles: []
+      articles: [],
+      total: 0
     }
   },
   created () {
@@ -111,6 +121,14 @@ export default {
         data: { data }
       } = await this.$axios.get('articles', { params: this.reqParams })
       this.articles = data.results
+      this.total = data.total_count
+    },
+    // 分页函数
+    pager (newpage) {
+      // 修改当前页码
+      this.reqParams.page = newpage
+      // 重新刷新数据
+      this.getArticles()
     }
   }
 }
