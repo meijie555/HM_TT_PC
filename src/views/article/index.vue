@@ -47,9 +47,9 @@
       </div>
       <el-table :data="articles">
         <el-table-column label="封面"></el-table-column>
-        <el-table-column label="标题"></el-table-column>
+        <el-table-column label="标题" prop='title'></el-table-column>
         <el-table-column label="状态"></el-table-column>
-        <el-table-column label="发布时间"></el-table-column>
+        <el-table-column label="发布时间" prop='pubdate'></el-table-column>
         <el-table-column label="操作"></el-table-column>
       </el-table>
       <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
@@ -74,12 +74,17 @@ export default {
   },
   created () {
     this.getChannelOptions()
+    this.getArticles()
   },
   methods: {
     // 频道数据获取
     async getChannelOptions () {
       const { data: { data } } = await this.$axios.get('channels')
       this.channelOptions = data.channels
+    },
+    async getArticles () {
+      const { data: { data } } = await this.$axios.get('articles', { params: this.reqParams })
+      this.articles = data.results
     }
   }
 }
