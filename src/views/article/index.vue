@@ -46,11 +46,32 @@
         <span>根据筛选条件共查询到 0 条结果：</span>
       </div>
       <el-table :data="articles">
-        <el-table-column label="封面"></el-table-column>
-        <el-table-column label="标题" prop='title'></el-table-column>
-        <el-table-column label="状态"></el-table-column>
-        <el-table-column label="发布时间" prop='pubdate'></el-table-column>
-        <el-table-column label="操作"></el-table-column>
+        <el-table-column label="封面">
+          <template slot-scope="scope">
+            <el-image :src="scope.row.cover.images[0]" style="width:150px;height:100px">
+              <div slot="error">
+                <img src="../../assets/error.gif" width="150" height="100" />
+              </div>
+            </el-image>
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" prop="title"></el-table-column>
+        <el-table-column label="状态">
+          <template slot-scope="scope">
+            <el-tag type="info" v-if='scope.row.status===0'>草稿</el-tag>
+            <el-tag v-if='scope.row.status===1'>待审核</el-tag>
+            <el-tag type="success" v-if='scope.row.status===2'>审核通过</el-tag>
+            <el-tag type="warning" v-if='scope.row.status===3'>审核失败</el-tag>
+            <el-tag type="danger" v-if='scope.row.status===4'>已删除</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="发布时间" prop="pubdate"></el-table-column>
+        <el-table-column label="操作" width="120">
+          <template>
+             <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
+             <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
     </el-card>
@@ -79,11 +100,16 @@ export default {
   methods: {
     // 频道数据获取
     async getChannelOptions () {
-      const { data: { data } } = await this.$axios.get('channels')
+      const {
+        data: { data }
+      } = await this.$axios.get('channels')
       this.channelOptions = data.channels
     },
+    // 文章列表
     async getArticles () {
-      const { data: { data } } = await this.$axios.get('articles', { params: this.reqParams })
+      const {
+        data: { data }
+      } = await this.$axios.get('articles', { params: this.reqParams })
       this.articles = data.results
     }
   }
