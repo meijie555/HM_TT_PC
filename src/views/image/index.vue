@@ -10,7 +10,7 @@
           <el-radio-button label="false">全部</el-radio-button>
           <el-radio-button label="true">收藏</el-radio-button>
         </el-radio-group>
-        <el-button type="success" style="float:right" size="small">添加素材</el-button>
+        <el-button type="success" style="float:right" size="small" @click="dialogVisible=true">添加素材</el-button>
       </div>
       <!-- 素材  -->
       <div class="imgList">
@@ -36,6 +36,17 @@
         @current-change="pager"
       ></el-pagination>
     </el-card>
+    <!-- 上传 -->
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="300px">
+      <el-upload
+        class="avatar-uploader"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :show-file-list="false"
+      >
+        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
+    </el-dialog>
   </div>
 </template>
 
@@ -49,7 +60,9 @@ export default {
         per_page: 10
       },
       images: [],
-      total: 0
+      total: 0,
+      dialogVisible: false,
+      imageUrl: null
     }
   },
   created () {

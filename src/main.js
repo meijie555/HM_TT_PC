@@ -4,6 +4,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from '@/router'
 import axios from '@/api'
+import '@/styles/index.less'
 // import myBreadcrumb   23 from '@/components/my_Breadcrumb'
 import plugin from '@/components/index'
 
