@@ -23,7 +23,14 @@
         </div>
       </div>
       <!-- 分页 -->
-      <el-pagination background layout="prev, pager, next" :total="total"></el-pagination>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="reqParams.per_page"
+        :current-page="reqParams.page"
+        @current-change='pager'
+      ></el-pagination>
     </el-card>
   </div>
 </template>
@@ -46,9 +53,15 @@ export default {
   },
   methods: {
     async getImage () {
-      const { data: { data } } = await this.$axios.get('user/images', { params: this.reqParams })
+      const {
+        data: { data }
+      } = await this.$axios.get('user/images', { params: this.reqParams })
       this.images = data.results
       this.total = data.total_count
+    },
+    pager (newpage) {
+      this.reqParams.page = newpage
+      this.getImage()
     }
   }
 }
