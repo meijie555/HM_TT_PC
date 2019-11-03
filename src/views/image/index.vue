@@ -6,7 +6,7 @@
       </div>
       <!-- 按钮 -->
       <div class="btn">
-        <el-radio-group v-model="reqParams.collect" size="small">
+        <el-radio-group @change="toggleList" v-model="reqParams.collect" size="small">
           <el-radio-button label="false">全部</el-radio-button>
           <el-radio-button label="true">收藏</el-radio-button>
         </el-radio-group>
@@ -16,7 +16,7 @@
       <div class="imgList">
         <div class="imgItem" v-for="item of images" :key="item.id">
           <img :src="item.url" />
-          <div class="imgIcon">
+          <div class="imgIcon" v-show="!reqParams.collect">
             <span class="el-icon-star-off red"></span>
             <span class="el-icon-delete"></span>
           </div>
@@ -61,6 +61,10 @@ export default {
     },
     pager (newpage) {
       this.reqParams.page = newpage
+      this.getImage()
+    },
+    toggleList () {
+      this.reqParams.page = 1
       this.getImage()
     }
   }
