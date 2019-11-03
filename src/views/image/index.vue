@@ -22,7 +22,7 @@
               @click="toggleStatus(item)"
               :class="{red:item.is_collected}"
             ></span>
-            <span class="el-icon-delete"></span>
+            <span class="el-icon-delete" @click="delImg(item.id)"></span>
           </div>
         </div>
       </div>
@@ -82,6 +82,22 @@ export default {
       })
       item.is_collected = data.collect
       this.$message.success(data.collect ? '收藏成功' : '取消收藏')
+    },
+    // 删除素材
+    delImg (id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          await this.$axios.delete(`user/images/${id}`)
+          this.$message.success('删除成功')
+          this.getImage()
+        })
+        .catch(() => {
+          // 取消操作
+        })
     }
   }
 }
