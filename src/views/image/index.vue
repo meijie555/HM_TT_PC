@@ -17,7 +17,11 @@
         <div class="imgItem" v-for="item of images" :key="item.id">
           <img :src="item.url" />
           <div class="imgIcon" v-show="!reqParams.collect">
-            <span class="el-icon-star-off red"></span>
+            <span
+              class="el-icon-star-off"
+              @click="toggleStatus(item)"
+              :class="{red:item.is_collected}"
+            ></span>
             <span class="el-icon-delete"></span>
           </div>
         </div>
@@ -29,7 +33,7 @@
         :total="total"
         :page-size="reqParams.per_page"
         :current-page="reqParams.page"
-        @current-change='pager'
+        @current-change="pager"
       ></el-pagination>
     </el-card>
   </div>
@@ -59,13 +63,25 @@ export default {
       this.images = data.results
       this.total = data.total_count
     },
+    // 分页
     pager (newpage) {
       this.reqParams.page = newpage
       this.getImage()
     },
+    // 全部与收藏切换
     toggleList () {
       this.reqParams.page = 1
       this.getImage()
+    },
+    // 是否收藏
+    async toggleStatus (item) {
+      const {
+        data: { data }
+      } = await this.$axios.put(`user/images/${item.id}`, {
+        collect: !item.is_collected
+      })
+      item.is_collected = data.collect
+      this.$message.success(data.collect ? '收藏成功' : '取消收藏')
     }
   }
 }
