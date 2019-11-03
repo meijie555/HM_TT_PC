@@ -14,8 +14,8 @@
       </div>
       <!-- 素材  -->
       <div class="imgList">
-        <div class="imgItem" v-for="index of 10" :key="index">
-          <img src="../../assets/avatar.jpg" />
+        <div class="imgItem" v-for="item of images" :key="item.id">
+          <img :src="item.url" />
           <div class="imgIcon">
             <span class="el-icon-star-off red"></span>
             <span class="el-icon-delete"></span>
@@ -23,7 +23,7 @@
         </div>
       </div>
       <!-- 分页 -->
-      <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+      <el-pagination background layout="prev, pager, next" :total="total"></el-pagination>
     </el-card>
   </div>
 </template>
@@ -33,8 +33,22 @@ export default {
   data () {
     return {
       reqParams: {
-        collect: false
-      }
+        collect: false,
+        page: 1,
+        per_page: 10
+      },
+      images: [],
+      total: 0
+    }
+  },
+  created () {
+    this.getImage()
+  },
+  methods: {
+    async getImage () {
+      const { data: { data } } = await this.$axios.get('user/images', { params: this.reqParams })
+      this.images = data.results
+      this.total = data.total_count
     }
   }
 }
