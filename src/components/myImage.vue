@@ -134,7 +134,7 @@ export default {
           return this.$message.warning('请上传图片')
         }
         // this.defaultImage = this.uplocalImageUrl
-        this.$emit('input', this.uplocalImageUrl)
+        this.$emit('input', this.ulpocalImageUrl)
         this.dialogVisible = false
       }
     }

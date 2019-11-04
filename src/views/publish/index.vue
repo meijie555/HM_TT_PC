@@ -9,7 +9,7 @@
           <el-input v-model="articleForm.title" style="width:400px"></el-input>
         </el-form-item>
         <el-form-item label="内容:">
-          <quill-editor v-model="content" :options="editorOption"></quill-editor>
+          <quill-editor v-model="articleForm.content" :options="editorOption"></quill-editor>
         </el-form-item>
         <el-form-item label="封面:">
           <el-radio-group v-model="articleForm.cover.type" @change="articleForm.cover.images=[]">
@@ -30,8 +30,8 @@
           <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">发布</el-button>
-          <el-button>存入草稿</el-button>
+          <el-button type="primary" @click="published(false)">发布</el-button>
+          <el-button @click="published(true)">存入草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -53,12 +53,12 @@ export default {
     return {
       articleForm: {
         title: null,
+        content: null,
         cover: {
           type: 1,
           images: []
         }
       },
-      content: null,
       editorOption: {
         placeholder: '',
         modules: {
@@ -72,6 +72,14 @@ export default {
           ]
         }
       }
+    }
+  },
+  methods: {
+    // 点击发布还是存入草稿
+    async published (draft) {
+      await this.$axios.post(`articles?draft=${draft}`, this.articleForm)
+      this.$message.success(draft ? '存入草稿成功' : '发布成功')
+      this.$router.push('/article')
     }
   }
 }
