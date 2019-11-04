@@ -7,10 +7,10 @@
       <!-- 按钮 -->
       <div class="btn">
         <el-radio-group @change="toggleList" v-model="reqParams.collect" size="small">
-          <el-radio-button label="false">全部</el-radio-button>
-          <el-radio-button label="true">收藏</el-radio-button>
+          <el-radio-button :label="false">全部</el-radio-button>
+          <el-radio-button :label="true">收藏</el-radio-button>
         </el-radio-group>
-        <el-button type="success" style="float:right" size="small" @click="dialogVisible=true">添加素材</el-button>
+        <el-button type="success" style="float:right" size="small" @click="open">添加素材</el-button>
       </div>
       <!-- 素材  -->
       <div class="imgList">
@@ -40,8 +40,11 @@
     <el-dialog title="提示" :visible.sync="dialogVisible" width="300px">
       <el-upload
         class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+        :headers="headers"
+        name="image"
         :show-file-list="false"
+        :on-success="handleSuccess"
       >
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -51,6 +54,7 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     return {
@@ -62,7 +66,10 @@ export default {
       images: [],
       total: 0,
       dialogVisible: false,
-      imageUrl: null
+      imageUrl: null,
+      headers: {
+        Authorization: `Bearer ${local.getUser().token}`
+      }
     }
   },
   created () {
@@ -98,7 +105,7 @@ export default {
     },
     // 删除素材
     delImg (id) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该图片, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -111,6 +118,20 @@ export default {
         .catch(() => {
           // 取消操作
         })
+    },
+    handleSuccess (res) {
+      // console.log(res)
+      // 预览
+      this.imageUrl = res.data.url
+      this.$message.success('添加成功')
+      window.setTimeout(() => {
+        this.dialogVisible = false
+        this.getImage()
+      }, 2000)
+    },
+    open () {
+      this.dialogVisible = true
+      this.imageUrl = null
     }
   }
 }
