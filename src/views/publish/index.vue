@@ -8,7 +8,9 @@
         <el-form-item label="标题:">
           <el-input v-model="articleForm.title" style="width:400px"></el-input>
         </el-form-item>
-        <el-form-item label="内容:">fuwenben</el-form-item>
+        <el-form-item label="内容:">
+          <quill-editor v-model="content" :options="editorOption"></quill-editor>
+        </el-form-item>
         <el-form-item label="封面:">
           <el-radio-group v-model="articleForm.cover.type">
             <el-radio :label="1">单图</el-radio>
@@ -18,7 +20,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道:">
-            <my-channel v-model="articleForm.channel_id"></my-channel>
+          <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
         <el-form-item>
           <el-button type="primary">发布</el-button>
@@ -30,7 +32,16 @@
 </template>
 
 <script>
+// 富文本样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+// 富文本组件
+import { quillEditor } from 'vue-quill-editor'
 export default {
+  components: {
+    quillEditor
+  },
   data () {
     return {
       articleForm: {
