@@ -2,7 +2,7 @@
   <div class="my-image">
     <!-- 图片式按钮 -->
     <div class="btn_box" @click="open">
-      <img :src="defaultImage" alt />
+      <img :src="value||defaultImage" alt />
     </div>
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialogVisible" width="750px">
@@ -65,6 +65,7 @@ import local from '@/utils/local'
 import defaultImage from '../assets/default.png'
 export default {
   name: 'my-image',
+  props: ['value'],
   data () {
     return {
       reqParams: {
@@ -125,13 +126,15 @@ export default {
         if (!this.selectedImageUrl) {
           return this.$message.warning('请选择图片')
         }
-        this.defaultImage = this.selectedImageUrl
+        // this.defaultImage = this.selectedImageUrl
+        this.$emit('input', this.selectedImageUrl)
         this.dialogVisible = false
       } else {
         if (!this.uplocalImageUrl) {
           return this.$message.warning('请上传图片')
         }
-        this.defaultImage = this.uplocalImageUrl
+        // this.defaultImage = this.uplocalImageUrl
+        this.$emit('input', this.uplocalImageUrl)
         this.dialogVisible = false
       }
     }
@@ -140,6 +143,10 @@ export default {
 </script>
 
 <style scoped lang='less'>
+.my-image {
+  display: inline-block;
+  margin-right: 20px;
+}
 .btn_box {
   width: 150px;
   height: 150px;

@@ -12,14 +12,19 @@
           <quill-editor v-model="content" :options="editorOption"></quill-editor>
         </el-form-item>
         <el-form-item label="封面:">
-          <el-radio-group v-model="articleForm.cover.type">
+          <el-radio-group v-model="articleForm.cover.type" @change="articleForm.cover.images=[]">
             <el-radio :label="1">单图</el-radio>
             <el-radio :label="3">三图</el-radio>
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
           <!-- 封面图片组件 -->
-          <my-image></my-image>
+          <div v-if="articleForm.cover.type===1">
+            <my-image v-model="articleForm.cover.images[0]"></my-image>
+          </div>
+          <div v-if="articleForm.cover.type===3">
+            <my-image v-model="articleForm.cover.images[index-1]" v-for="index of 3" :key="index"></my-image>
+          </div>
         </el-form-item>
         <el-form-item label="频道:">
           <my-channel v-model="articleForm.channel_id"></my-channel>
@@ -49,7 +54,8 @@ export default {
       articleForm: {
         title: null,
         cover: {
-          type: 1
+          type: 1,
+          images: []
         }
       },
       content: null,
