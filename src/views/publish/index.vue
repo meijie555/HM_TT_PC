@@ -52,6 +52,7 @@ export default {
           type: 1
         }
       },
+      content: null,
       editorOption: {
         placeholder: '',
         modules: {
