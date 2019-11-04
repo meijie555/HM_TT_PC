@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-publish">
     <el-card>
       <div slot="header">
         <my-Breadcrumb>发布文章</my-Breadcrumb>
@@ -48,6 +48,19 @@ export default {
         title: null,
         cover: {
           type: 1
+        }
+      },
+      editorOption: {
+        placeholder: '',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ header: 1 }, { header: 2 }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ indent: '-1' }, { indent: '+1' }],
+            ['image']
+          ]
         }
       }
     }
