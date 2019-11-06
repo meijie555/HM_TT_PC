@@ -8,6 +8,7 @@ import local from '@/utils/local'
 import Article from '@/views/article'
 import Image from '@/views/image'
 import Publish from '@/views/publish'
+import Comment from '@/views/comment'
 
 Vue.use(VueRouter)
 
@@ -36,7 +37,7 @@ const router = new VueRouter({
       component: Publish
     }, {
       path: '/comment',
-      component: null
+      component: Comment
     }, {
       path: '/fans',
       component: null
