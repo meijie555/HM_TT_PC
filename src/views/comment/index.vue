@@ -14,8 +14,13 @@
         </el-table-column>
         <el-table-column label="操作" width="120px">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.comment_status" type="danger" size="small">关闭评论</el-button>
-            <el-button v-else type="success" size="small">打开评论</el-button>
+            <el-button
+              @click="toggleStatus(scope.row)"
+              v-if="scope.row.comment_status"
+              type="danger"
+              size="small"
+            >关闭评论</el-button>
+            <el-button @click="toggleStatus(scope.row)" v-else type="success" size="small">打开评论</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -63,6 +68,32 @@ export default {
       this.reqParams.page = newPage
       // 重新获取数据
       this.getComments()
+    },
+    // 切换 按钮状态
+    toggleStatus (row) {
+      const text = row.comment_status ? '确定要关闭评论吗' : '确定要打开评论吗'
+      this.$confirm(text, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          // 发送修改请求
+          const {
+            data: { data }
+          } = await this.$axios.put(`comments/status?article_id=${row.id}`, {
+            allow_comment: !row.comment_status
+          })
+          // 请求成功后
+          this.$message.success(
+            data.allow_comment ? '打开评论成功' : '关闭评论成功'
+          )
+          // 更新操作状态
+          row.comment_status = data.allow_comment
+        })
+        .catch(() => {
+          // 取消操作
+        })
     }
   }
 }
