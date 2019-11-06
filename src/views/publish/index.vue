@@ -2,7 +2,7 @@
   <div class="container-publish">
     <el-card>
       <div slot="header">
-        <my-Breadcrumb>发布文章</my-Breadcrumb>
+        <my-Breadcrumb>{{$route.query.id?'修改文章' : '发布文章'}}</my-Breadcrumb>
       </div>
       <el-form label-width="120px">
         <el-form-item label="标题:">
@@ -29,7 +29,11 @@
         <el-form-item label="频道:">
           <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="$route.query.id">
+          <el-button type="primary" @click="updata(false)">修改</el-button>
+          <el-button @click="updata(true)">存入草稿</el-button>
+        </el-form-item>
+        <el-form-item v-else>
           <el-button type="primary" @click="published(false)">发布</el-button>
           <el-button @click="published(true)">存入草稿</el-button>
         </el-form-item>
@@ -65,13 +69,15 @@ export default {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'],
             ['blockquote', 'code-block'],
-            [{ header: 1 }, { header: 2 }],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            [{ indent: '-1' }, { indent: '+1' }],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
             ['image']
           ]
         }
-      }
+      },
+      // 文章id
+      articleId: null
     }
   },
   methods: {
@@ -80,6 +86,49 @@ export default {
       await this.$axios.post(`articles?draft=${draft}`, this.articleForm)
       this.$message.success(draft ? '存入草稿成功' : '发布成功')
       this.$router.push('/article')
+    },
+    // 文章列表
+    async getArticles (id) {
+      const {
+        data: { data }
+      } = await this.$axios.get(`articles/${id}`)
+      this.articleForm = data
+    },
+    // 点击修改
+    async updata (draft) {
+      await this.$axios.put(
+        `articles/${this.articleForm.id}?draft=${draft}`,
+        this.articleForm
+      )
+      this.$message.success(draft ? '存入草稿成功' : '修改成功')
+      this.$router.push('/article')
+    }
+  },
+  created () {
+    const articleId = this.$route.query.id
+    if (articleId) {
+      // 面包屑修改
+      // 内容填充
+      this.getArticles(articleId)
+    }
+  },
+  // 监听路由参数
+  watch: {
+    '$route.query.id': function (newVal, oldVal) {
+      if (newVal) {
+        // 填充列表
+        this.getArticles()
+      } else {
+        // 重置列表
+        this.articleForm = {
+          title: null,
+          content: null,
+          cover: {
+            type: 1,
+            images: []
+          }
+        }
+      }
     }
   }
 }
